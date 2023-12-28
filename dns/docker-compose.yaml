@@ -1,0 +1,36 @@
+version: "3"
+
+# More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
+services:
+  adguard:
+    container_name: adguard
+    image: adguard/adguardhome:latest
+    # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "68:68/udp" # Only required if you are using Pi-hole as your DHCP server
+      - "80:80/tcp"
+      - "6443:443/tcp"
+      - "6443:443/udp"
+      - "3000:3000/tcp"
+      - "853:853/tcp"
+      - "853:853/udp"
+      - "5443:5443/tcp" 
+      - "5443:5443/udp"
+      - "6060:6060/tcp"
+    environment:
+      TZ: 'Europe/Vilnius'
+      # WEBPASSWORD: 'set a secure password here or it will be random'
+    # Volumes store your data between container upgrades
+    volumes:
+      - 'work:/opt/adguardhome/work'
+      - 'config:/opt/adguarrdhome/conf'
+    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+    restart: unless-stopped
+volumes:
+  config: 
+    driver: local
+  work:
+    driver: local

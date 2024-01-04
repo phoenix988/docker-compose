@@ -7,8 +7,8 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Vilnius
-      - USER=karl
-      - PASS=Konul.karl
+      - USER=user
+      - PASS=pass
     volumes:
       - transmission:/config
       - /mnt/media/films:/films

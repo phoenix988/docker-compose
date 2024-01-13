@@ -33,13 +33,13 @@ spec:
         image: mariadb
         env:
           - name: MYSQL_ROOT_PASSWORD
-            value: "Konul.karl"
+            value: "pass"
           - name: MYSQL_DATABASE
             value: "nextcloud"
           - name: MYSQL_USER
-            value: "karl"
+            value: "user"
           - name: MYSQL_PASSWORD
-            value: "Konul.karl"
+            value: "pass"
         ports:
         - containerPort: 3306
         volumeMounts:

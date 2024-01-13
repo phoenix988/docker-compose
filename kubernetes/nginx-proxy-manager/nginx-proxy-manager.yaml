@@ -1,0 +1,62 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-proxy-manager
+  namespace: nginx-proxy-manager
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx-proxy-manager
+  template:
+    metadata:
+      labels:
+        app: nginx-proxy-manager
+    spec:
+      containers:
+      - name: app
+        image: jc21/nginx-proxy-manager:latest
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        - containerPort: 81
+        volumeMounts:
+        - name: data-volume
+          mountPath: /data
+        - name: letsencrypt-volume
+          mountPath: /etc/letsencrypt
+      volumes:
+      - name: data-volume
+        hostPath:
+          path: /mnt/nginx-data/data
+      - name: letsencrypt-volume
+        hostPath:
+          path: /mnt/nginx-data/letsencrypt
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-proxy-manager
+  namespace: nginx-proxy-manager
+spec:
+  type: LoadBalancer
+  selector:
+    app: nginx-proxy-manager
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 30080
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
+    nodePort: 30443
+  - name: admin 
+    protocol: TCP
+    port: 81
+    targetPort: 81
+    nodePort: 30081
+

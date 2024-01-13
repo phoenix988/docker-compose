@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: longhorn-access-pod
+spec:
+  containers:
+  - name: longhorn-access-container
+    image: nginx
+    volumeMounts:
+    - name: data-volume
+      mountPath: /mnt/nginx-proxy/data
+    - name: letsencrypt-volume
+      mountPath: /mnt/nginx-proxy/letsencrypt
+  volumes:
+  - name: data-volume
+    persistentVolumeClaim:
+      claimName: nginx-proxy-data-claim
+  - name: letsencrypt-volume
+    persistentVolumeClaim:
+      claimName: nginx-proxy-letsencrypt-claim
+
+

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ntfy
+  annotations:
+    {}
+    #  key: string
+  labels:
+    {}
+    #  key: string
+  namespace: homarr-dashboard
+  fields:
+    - homarr-icons
+    - 1
+    - 12m
+data:
+  app: ntfy
+  #  key: string
+#binaryData:  key: string
+#immutable: boolean

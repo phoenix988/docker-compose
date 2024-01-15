@@ -10,10 +10,10 @@ services:
     ports: 
       - 3306:3306
     environment:
-      MARIADB_ROOT_PASSWORD: Konul.karl
+      MARIADB_ROOT_PASSWORD: pass
       MARIADB_DATABASE: nextcloud
-      MARRIADB_USER: karl
-      MARIADB_USER_PASSWORD: Konul.karl
+      MARRIADB_USER: user
+      MARIADB_USER_PASSWORD: pass
     volumes: 
       - mariadb_data:/var/lib/mysql
 

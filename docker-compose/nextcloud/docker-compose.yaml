@@ -3,7 +3,7 @@ version: '3.1'
 
 services:
 
-  db:
+  db: # Database for nextcloud
     container_name: mariadb
     image: mariadb
     restart: always

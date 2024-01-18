@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  grafana:
+    image: grafana/grafana-enterprise
+    # container_name: grafana
+    # restart: unless-stopped
+    ports:
+      - '3002:3000'
+    volumes:
+      - grafana_data:/var/lib/grafana
+    deploy:
+      mode: global
+volumes:
+  grafana_data:
+     driver_opts:
+      type: nfs
+      o: addr=192.168.0.10,rw,nolock,hard,nointr,nfsvers=4
+      device: ":/mnt/main/docker-volumes/grafana"

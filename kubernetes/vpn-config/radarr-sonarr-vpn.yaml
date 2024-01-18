@@ -1,0 +1,73 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: media
+  name: sonarr
+spec:
+  selector:
+    app: media-locate
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8989
+      targetPort: 8989
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: media
+  name: media-locate
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: media-locate
+  template:
+    metadata:
+      labels:
+        app: media-locate
+    spec:
+      containers:
+        - name: radarr
+          image: lscr.io/linuxserver/radarr:latest
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "Europe/Vilnius"
+        - name: sonarr
+          image: lscr.io/linuxserver/sonarr:latest
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "Europe/Vilnius"
+        - name: vpn
+          image: ghcr.io/bubuntux/nordvpn
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+                - NET_RAW
+          env:
+            - name: TOKEN
+              value: "token"
+            - name: CONNECT
+              value: "Sweden"
+            - name: TECHNOLOGY
+              value: "NordLynx"
+            - name: NETWORK
+              value: "192.168.0.0/24"
+          ports:
+            - containerPort: 8080
+            - containerPort: 7878
+            - containerPort: 8989
+
+---
+# Add similar sections for other services (overseerr, radarr, prowlarr, sonarr)
+

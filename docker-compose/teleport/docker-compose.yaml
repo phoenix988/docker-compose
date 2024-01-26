@@ -1,0 +1,36 @@
+---
+services:
+  teleport:
+    image: public.ecr.aws/gravitational/teleport-distroless:13
+    # ports:
+      # -- (Optional) Remove this section, when using Traefik
+      # - "3080:3080"
+      # - "3023:3023"
+      # - "3024:3024"
+      # - "3025:3025"
+    volumes:
+      - ./config:/etc/teleport
+      - ./data:/var/lib/teleport
+    deploy:
+      mode: global
+    # -- (Optional) Traefik example configuration
+    labels:
+       - "traefik.enable=true"
+       - "traefik.http.services.teleport.loadbalancer.server.port=3080"
+       - "traefik.http.services.teleport.loadbalancer.server.scheme=https"
+       - "traefik.http.routers.teleport-http.entrypoints=http"
+       - "traefik.http.routers.teleport-http.rule=HostRegexp(`teleport.local.phoenixonline.club`, `{subhost:[a-z]+}.teleport.local.phoenixonline.club`)"
+       - "traefik.http.routers.teleport-https.entrypoints=https"
+       - "traefik.http.routers.teleport-https.rule=HostRegexp(`teleport.local.phoenixonline.club`, `{subhost:[a-z]+}.teleport.local.phoenixonline.club`)"
+       - "traefik.http.routers.teleport-https.tls=true"
+       - "traefik.http.routers.teleport-https.tls.certresolver=cloudflare"
+       - "traefik.http.routers.teleport-https.tls.domains[0].main=teleport.phoenixonline.club"
+       - "traefik.http.routers.teleport-https.tls.domains[0].sans=*.teleport.phoenixonline.club"
+    networks:
+      - proxy
+    # restart: unless-stopped
+
+# -- (Optional) When using Traefik, use this section
+networks:
+  proxy:
+    external: true

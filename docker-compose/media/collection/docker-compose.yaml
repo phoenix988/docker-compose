@@ -1,0 +1,74 @@
+---
+version: "3.8"
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Vilnius
+      - JELLYFIN_PublishedServerUrl=jelly.phoenixonline.club #optional
+    volumes:
+      - jellyfin_conf:/config
+      - /mnt/media/shows:/data/tvshows
+      - /mnt/media/films:/data/movies
+    ports:
+      - 8096:8096
+      - 8920:8920 #optional
+      - 7359:7359/udp #optional
+      - 1900:1900/udp #optional
+    restart: unless-stopped
+
+  overseerr:
+    image: lscr.io/linuxserver/overseerr:latest
+    container_name: overseerr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Vilnius
+    volumes:
+      - overseerr_data:/config
+    ports:
+      - 5055:5055
+    restart: unless-stopped
+
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    ports:
+      - 32400:32400
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Vilnius
+      - VERSION=docker
+      - PLEX_CLAIM=claim-riKyQHYhzEo5UPXfQvFv
+    volumes:
+      - plex_config:/config
+      - /mnt/media/shows:/tv
+      - /mnt/media/films:/movies
+    restart: unless-stopped
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == kf-worker03
+
+volumes:
+  jellyfin_conf:
+     driver_opts:
+      type: nfs
+      o: addr=192.168.0.10,rw,nolock,hard,nointr,nfsvers=3
+      device: ":/mnt/main/docker-volumes/jellyfin"
+
+  overseerr_data:
+     driver_opts:
+      type: nfs
+      o: addr=192.168.0.10,rw,nolock,hard,nointr,nfsvers=3
+      device: ":/mnt/main/docker-volumes/overseer"
+  
+  plex_config:
+     driver_opts:
+      type: nfs
+      o: addr=192.168.0.10,rw,nolock,hard,nointr,nfsvers=3
+      device: ":/mnt/main/docker-volumes/plex-config"

@@ -1,0 +1,24 @@
+version: "2.1"
+services:
+  transmission:
+    image: lscr.io/linuxserver/transmission:latest
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Vilnius
+      - USER=user
+      - PASS=pass
+    volumes:
+      - transmission:/config
+      - /mnt/media/films:/films
+      - /mnt/media/shows:/shows
+      - /mnt/media/downloads:/downloads
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
+volumes:
+  transmission:
+    driver: local

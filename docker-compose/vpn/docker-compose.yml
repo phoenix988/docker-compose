@@ -1,0 +1,55 @@
+version: "3"
+services:
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - VPN_SERVICE_PROVIDER=${VPN_SERVICE_PROVIDER}
+      - VPN_TYPE=${VPN_TYPE} # or wireguard
+      - OPENVPN_USER=${OPENVPN_USER}
+      - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
+      - SERVER_COUNTRIES=${SERVER_COUNTRIES}
+    ports:
+      - 9092:9091
+      - 9117:9117
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
+  
+  transmission:
+    image: lscr.io/linuxserver/transmission:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TZ}
+      - USER=${USER}
+      - PASS=${PASS}
+    volumes:
+      - transmission_config:/config
+      - /mnt/media/films:/films
+      - /mnt/media/shows:/shows
+      - /mnt/media/downloads:/downloads
+    restart: unless-stopped
+    network_mode: container:gluetun
+
+  jackett:
+    image: lscr.io/linuxserver/jackett:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TZ}
+      - AUTO_UPDATE=true #optional
+      - RUN_OPTS= #optional
+    volumes:
+      - jackett_config:/config
+      - /mnt/media/downloads:/downloads
+    restart: unless-stopped
+    network_mode: container:gluetun
+
+volumes:
+  transmission_config:
+    driver: local
+  jackett_config:
+    driver: local

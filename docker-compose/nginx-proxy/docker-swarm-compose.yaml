@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  proxy_manager:
+  nginx_manager:
     container_name: nginx-proxy
     image: 'jc21/nginx-proxy-manager:latest'
     restart: unless-stopped
@@ -9,8 +9,12 @@ services:
       - '8183:81'
       - '5443:443'
     volumes:
-      - proxy_data:/data
-      - proxy_letsencrypt:/etc/letsencrypt
+      - /mnt/nginx-data/data:/data
+      - /mnt/nginx-data/letsencrypt:/etc/letsencrypt
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager 
 volumes:
   proxy_data:
     driver_opts:

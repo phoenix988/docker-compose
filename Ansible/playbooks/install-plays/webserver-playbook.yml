@@ -1,0 +1,15 @@
+---
+- name: install and start apache
+  hosts: 192.168.122.246
+  become: yes
+
+  tasks:
+    - name: https package is present
+       dnf: 
+        name: httpd
+        state: latest
+ 
+    - name: httpd is started
+      service:
+        name: httpd      
+        state: started

@@ -1,0 +1,16 @@
+---
+  - name: neovim
+    hosts: debian
+    tasks:
+      - name: ensure neovim is there      
+        become: true  
+        apt: 
+          name: neovim
+          state: latest
+          update_cache: true  
+      - name: links neovim to vim      
+        become: true
+        file:  
+          state: link
+          dest: /usr/bin/vim
+          src: /usr/bin/nvim

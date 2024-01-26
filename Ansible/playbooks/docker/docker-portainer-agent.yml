@@ -1,0 +1,15 @@
+---
+  - name: Configures portainer agent in docker
+    hosts: debian
+    tasks: 
+      - name: installs portainer agent
+        docker_container:
+          name: portainer_agent
+          image: portainer/agent
+          ports:
+            - 9001:9001
+          state: started  
+          volumes:
+            - portainer_data_agent:/var/lib/docker/volumes
+            - /var/run/docker.sock:/var/run/docker.sock  
+          restart_policy: unless-stopped    

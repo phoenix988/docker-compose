@@ -1,0 +1,9 @@
+- name: install zsh
+  hosts: "rhel"
+  tasks:
+    - name: install zsh
+      dnf:
+        name: zsh
+        state: present
+        update_cache: true
+      become: true  

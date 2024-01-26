@@ -1,0 +1,11 @@
+- hosts: debian
+  roles:
+    - role: gantsign.oh-my-zsh
+      users:
+        - username: karl
+          oh_my_zsh: 
+            theme: af-magic 
+            plugins:
+              - git 
+              - mvn 
+

@@ -1,0 +1,13 @@
+---
+  - name: Install packages
+    hosts: all_servers
+    vars:
+      - packages_name:
+          - ansible
+    tasks:
+      - name: Installing ansible     
+        become: true  
+        package: 
+          name: '{{ packages_name }}'
+          state: latest
+

@@ -1,0 +1,7 @@
+- name: Docker Tasks
+  hosts: cluster
+  become: yes
+  tasks:
+    - name: Cleaning unused docker volumes
+      shell: docker volume prune
+

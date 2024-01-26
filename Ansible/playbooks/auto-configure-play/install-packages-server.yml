@@ -1,0 +1,17 @@
+---
+  - name: install general packages
+    become: true
+    vars:
+      general_packages:
+       - git
+       - bat
+       - wget
+       - zsh
+       - neovim  
+       - tmux  
+       - neofetch  
+    package:
+      name: '{{ general_packages }}'
+      state: latest  
+      
+...

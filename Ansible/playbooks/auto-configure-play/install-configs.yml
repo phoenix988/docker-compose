@@ -1,0 +1,70 @@
+---
+
+  - name: copying my script folder      
+    shell:
+      cmd: cp -r /home/karl/dotfiles/.scripts /home/karl/
+
+  - name: copying my dmenu folder      
+    shell:
+      cmd: cp -r /home/karl/dotfiles/.dmenu /home/karl/
+
+  - name: moving all my configs to .config in home      
+    shell:
+      cmd: cp -r dotfiles/.config .
+
+  - name: linking my scripts to /usr/bin
+    become: true
+    file:
+      state: link
+      src: /home/karl/.scripts/activated  
+      dest: /usr/bin/myscripts  
+
+  - name: download starship script      
+    get_url:
+      dest: /home/karl
+      url:  https://raw.githubusercontent.com/phoenix988/setup/main/starship.sh
+
+  - name: install starship       
+    become: true
+    shell:  
+      cmd: sh starship.sh -y
+
+  - name: creating folder Documents/lists       
+    file:  
+      state: directory      
+      dest: Documents/lists
+
+  - name: gets my alias list and add it to Documents/lists
+    get_url:
+      dest: /home/karl/Documents/lists/
+      url: https://raw.githubusercontent.com/phoenix988/dotfiles/main/Documents/lists/alias.list
+
+  - name: copying my aliases to zsh
+    shell:
+      cmd: cp Documents/lists/alias.list  .config/oh-my-zsh/aliases.sh
+
+  - name: getting my zshrc file      
+    get_url:  
+      dest: /home/karl/.zshrc 
+      url: https://raw.githubusercontent.com/phoenix988/dotfiles/main/.zshrc
+
+  - name: links neovim to vim      
+    become: true
+    file:  
+      state: link
+      dest: /usr/bin/vim
+      src: /usr/bin/nvim     
+  
+  - name: getting bashrc
+    copy:
+      remote_src: yes
+      src: dotfiles/.bashrc
+      dest: /home/karl  
+  
+  - name: getting tmux config
+    copy:
+      remote_src: yes
+      src: dotfiles/.tmux.conf.local
+      dest: /home/karl  
+  
+...

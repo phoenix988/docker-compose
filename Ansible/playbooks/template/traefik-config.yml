@@ -1,0 +1,13 @@
+- name: Moving Traefik config
+  hosts: all_servers
+  become: yes
+  tasks:
+    - name: Creating traefik folder
+      file:
+        path: /etc/traefik
+        state: directory
+    - name: Creating config folder
+      template:
+        src: /home/karl/docker-compose/docker-compose/traefik/config/traefik.yml
+        dest: /etc/traefik/traefik.yml
+        

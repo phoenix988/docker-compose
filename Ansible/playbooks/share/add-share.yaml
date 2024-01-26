@@ -1,0 +1,80 @@
+- name: Adding cluster data  drive to k3s
+  hosts: cluster
+  become: yes
+  tasks:
+    - name: updating fstab
+      lineinfile:
+        path: /etc/fstab
+        line: '192.168.0.10:/mnt/main/cluster-data   /mnt/cluster-data   nfs   defaults   0   0'
+        state: absent
+    - name: Ensure /mnt/cluster-data folder exists
+      file:
+        path: /mnt/cluster-data
+        state: absent
+
+    - name: Installing nfs packages  
+      package: 
+         name: 'nfs-common'
+         state: latest
+ 
+- name: Adding my nas share to all servers
+  hosts: all_servers
+  become: yes
+  vars:
+    remove:
+      - /mnt/local-data
+      - /mnt/nginx-proxy
+      - /mnt/nginx-data
+  tasks:
+    - name: updating fstab (Karl)
+      lineinfile:
+        path: /etc/fstab
+        line: '192.168.0.10:/mnt/main/Karl   /mnt/fileserver   nfs   defaults   0   0'
+        state: present
+    - name: updating fstab (docker-compose)
+      lineinfile:
+        path: /etc/fstab
+        line: '192.168.0.10:/mnt/main/Karl/docker-compose   /home/karl/docker-compose   nfs   defaults   0   0'
+        state: present
+    - name: updating fstab (Yandex)
+      lineinfile:
+        path: /etc/fstab
+        line: '192.168.0.10:/mnt/main/Karl/yandex   /mnt/yandex   nfs   defaults   0   0'
+        state: present
+    - name: updating fstab (Media)
+      lineinfile:
+        path: /etc/fstab
+        line: '192.168.0.10:/mnt/main/Karl/media   /mnt/media   nfs   defaults   0   0'
+        state: present
+    - name: updating fstab (Docker-volumes)
+      lineinfile:
+        path: /etc/fstab
+        line: '192.168.0.10:/mnt/main/docker-volumes   /mnt/docker-volumes   nfs   defaults   0   0'
+        state: present
+    - name: Ensure fileserver folder exists
+      file:
+        path: /mnt/fileserver
+        state: directory
+    - name: Ensure yandex folder exists
+      file:
+        path: /mnt/yandex
+        state: directory
+    - name: Ensure docker-compose folder exists
+      file:
+        path: /home/karl/docker-compose
+        state: directory
+    - name: Ensure media folder exists
+      file:
+        path: /mnt/media 
+        state: directory
+    - name: Ensure docker-volumes folder exists
+      file:
+        path: /mnt/docker-volumes 
+        state: directory
+    - name: Run mount -a
+      shell: mount -a
+    - name: removing folders
+      file:
+        path: "{{ remove }}"
+        state: absent
+

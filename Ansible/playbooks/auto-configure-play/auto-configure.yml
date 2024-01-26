@@ -1,0 +1,66 @@
+---
+ - name: Playbook to configure a newly installed server
+   hosts: servers
+   roles:
+     - role: gantsign.oh-my-zsh
+       users:
+         - username: karl
+           oh_my_zsh: 
+             theme: af-magic 
+             plugins:
+               - git 
+               - mvn 
+
+ - name: general packages 
+   hosts: servers
+   tasks:
+     - include: install-packages-server.yml
+ - name: apt packages 
+   hosts: debian
+   tasks:
+     - include: ../install-plays/apt.yml
+ 
+ - name: pacman packages
+   hosts: arch_base
+   become: true
+   tasks:
+     - name: install my choosen packages for arch based systems
+       vars:
+         pacman_packages:
+           - lsd
+           - bat  
+       pacman:      
+         name: '{{ pacman_packages }}'
+         state: latest  
+         update_cache: yes  
+ 
+ - name: doing some tasks for arch based systems     
+   vars:
+     my_comps:
+       - void
+       - arch_base  
+   hosts: '{{ my_comps }}'
+   tasks:      
+     - name: links bat to batcat
+       file: 
+         state: link
+         src: /usr/bin/bat  
+         dest: /usr/bin/batcat  
+         
+ - name: clones my git repositories    
+   hosts: servers
+   tasks:
+     - include: git.yml  
+ - name: install all my configs    
+   hosts: servers
+   tasks:
+     - include: install-configs.yml  
+ - name: clear files 
+   hosts: servers
+   tasks:
+     - include: clear-files.yml   
+ - name: ssh key config 
+   hosts: servers
+   tasks:
+     - include: ssh-key.yml   
+ 

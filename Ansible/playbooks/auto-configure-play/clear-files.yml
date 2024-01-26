@@ -1,0 +1,13 @@
+---
+  - name: remove dotfiles repo
+    file:
+      state: absent
+      dest: /home/karl/dotfiles  
+  - name: remove starship script      
+    file:
+      state: absent
+      dest: /home/karl/starship.sh  
+  - name: remove old zshrc backups      
+    shell:
+      cmd: rm .zshrc.*
+...            

@@ -1,0 +1,14 @@
+---
+  - name: install apt packages for debian base      
+    vars:
+      apt_dpkg:
+        - samba
+        - cifs-utils  
+        - nfs-common
+        - nfs-server  
+    become: true
+    apt:
+      name: "{{ apt_dpkg }}"
+      state: latest
+      update_cache: true  
+...

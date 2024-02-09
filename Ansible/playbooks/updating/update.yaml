@@ -1,5 +1,4 @@
 - name: Updating Servers
-  hosts: cluster
   become: yes
   tasks:
     - name: Running apt dist-upgrade
@@ -10,17 +9,6 @@
         name: unattended-upgrades
         state: present
 
-- name: Updating proxmox Servers
-  hosts: pve
-  become: yes
-  tasks:
-    - name: Running apt dist-upgrade
-      apt:
-        upgrade: dist
-    - name:
-      apt:
-        name: unattended-upgrades
-        state: present
 
  
 

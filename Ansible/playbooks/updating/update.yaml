@@ -1,5 +1,6 @@
 - name: Updating Servers
   become: yes
+  hosts: cluster
   tasks:
     - name: Running apt dist-upgrade
       apt:

@@ -1,0 +1,12 @@
+--- 
+  - name: Cloning my git repos
+    hosts: all_servers
+    tasks:
+      - name: Cloning Ansible branch from my compose repo
+        git:
+          clone: yes
+          dest: /home/karl/ansible  
+          repo: https://github.com/phoenix988/docker-compose.git 
+          branch: ansible
+
+  

@@ -1,4 +1,4 @@
-- name: Adding cluster data  drive to k3s
+- name: Adding shared docker data folder
   hosts: cluster
   become: yes
   tasks:
@@ -7,7 +7,7 @@
         path: /etc/fstab
         line: '192.168.0.10:/mnt/main/cluster-data   /mnt/cluster-data   nfs   defaults   0   0'
         state: absent
-    - name: Ensure /mnt/cluster-data folder exists
+    - name: Ensure /mnt/cluster-data folder doesnt exist
       file:
         path: /mnt/cluster-data
         state: absent
@@ -36,6 +36,11 @@
         path: /etc/fstab
         line: '192.168.0.10:/mnt/main/Karl/docker-compose   /home/karl/docker-compose   nfs   defaults   0   0'
         state: present
+    - name: updating fstab (kfplates)
+      lineinfile:
+        path: /etc/fstab
+        line: '192.168.0.10:/mnt/main/Karl/docker-compose  /home/karl/kfplates   nfs   defaults   0   0'
+        state: present
     - name: updating fstab (Yandex)
       lineinfile:
         path: /etc/fstab
@@ -62,6 +67,10 @@
     - name: Ensure docker-compose folder exists
       file:
         path: /home/karl/docker-compose
+        state: directory
+    - name: Ensure kfplates folder exists
+      file:
+        path: /home/karl/kfplates
         state: directory
     - name: Ensure media folder exists
       file:

@@ -7,6 +7,10 @@
           clone: yes
           dest: /home/karl/ansible  
           repo: https://github.com/phoenix988/docker-compose.git 
-          branch: ansible
-
-  
+          version: ansible
+      - name: Cloning docker-compose branch from my compose repo
+        git:
+          clone: yes
+          dest: /home/karl/docker-compose
+          repo: https://github.com/phoenix988/docker-compose.git
+          version: docker-compose

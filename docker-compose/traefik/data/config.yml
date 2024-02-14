@@ -1,0 +1,512 @@
+http:
+ #region routers 
+  routers:
+    proxmox:
+      entryPoints:
+        - "https"
+      rule: "Host(`pve.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: proxmox
+
+    jellyfin:
+      entryPoints:
+        - "https"
+      rule: "Host(`jelly.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: jellyfin
+
+    plex:
+      entryPoints:
+        - "https"
+      rule: "Host(`plex.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: plex
+
+    nextcloud:
+      entryPoints:
+        - "https"
+      rule: "Host(`data.phoenixonline.club`)"
+      service: nextcloud
+      middlewares:
+        - nextcloud-chain
+      tls: {}
+
+    portainer:
+      entryPoints:
+        - "https"
+      rule: "Host(`pt.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: portainer
+
+    transmission:
+      entryPoints:
+        - "https"
+      rule: "Host(`download.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: transmission
+
+    homerr:
+      entryPoints:
+        - "https"
+      rule: "Host(`www.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: homerr
+
+    ntfy:
+      entryPoints:
+        - "https"
+      rule: "Host(`ntfy.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: ntfy
+
+    kasm:
+      entryPoints:
+        - "https"
+      rule: "Host(`kasim.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: kasm
+
+    adguard:
+      entryPoints:
+        - "https"
+      rule: "Host(`dns.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: adguard
+
+    guacamole:
+      entryPoints:
+        - "https"
+      rule: "Host(`ssh.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: guacamole
+
+    radarr:
+      entryPoints:
+        - "https"
+      rule: "Host(`radarr.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: radarr
+
+    sonarr:
+      entryPoints:
+        - "https"
+      rule: "Host(`sonarr.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: sonarr
+
+    prowlarr:
+      entryPoints:
+        - "https"
+      rule: "Host(`prowlarr.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: prowlarr
+
+    code:
+      entryPoints:
+        - "https"
+      rule: "Host(`code.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: code
+
+    overserr:
+      entryPoints:
+        - "https"
+      rule: "Host(`overserr.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: overserr
+
+    dockge:
+      entryPoints:
+        - "https"
+      rule: "Host(`dockge.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: dockge
+
+    uptime:
+      entryPoints:
+        - "https"
+      rule: "Host(`monitor.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: uptime
+
+    prometheus:
+      entryPoints:
+        - "https"
+      rule: "Host(`prom.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: prometheus
+
+    grafana:
+      entryPoints:
+        - "https"
+      rule: "Host(`graf.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: grafana
+
+    truenas:
+      entryPoints:
+        - "https"
+      rule: "Host(`nas.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: truenas
+
+    ansible:
+      entryPoints:
+        - "https"
+      rule: "Host(`ansible.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: ansible
+
+    adminer:
+      entryPoints:
+        - "https"
+      rule: "Host(`adminer.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: adminer
+
+    tplink:
+      entryPoints:
+        - "https"
+      rule: "Host(`tp.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: tplink
+
+    uvdesk:
+      entryPoints:
+        - "https"
+      rule: "Host(`uvdesk.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: uvdesk
+
+    jackett:
+      entryPoints:
+        - "https"
+      rule: "Host(`jackett.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: jackett
+
+    tau:
+      entryPoints:
+        - "https"
+      rule: "Host(`tau.local.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: tau
+
+    kuma-prod-2:
+      entryPoints:
+        - "https"
+      rule: "Host(`kuma-prod-2.local.phoenixonline.club`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: kuma-prod-2
+    #endregion
+
+#region services
+  services:
+    proxmox:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.0.2:8006"
+        passHostHeader: true
+
+    jellyfin:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.4:8096"
+        passHostHeader: true
+
+    plex:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.4:32400"
+        passHostHeader: true
+
+    nextcloud:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.0.4:443"
+        passHostHeader: true
+
+    portainer:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.0.6:9444"
+        passHostHeader: true
+
+    transmission:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.4:9092"
+        passHostHeader: true
+
+    homerr:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.6:8083"
+        passHostHeader: true
+
+    ntfy:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.6:8082"
+        passHostHeader: true
+
+    kasm:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.0.9:443"
+        passHostHeader: true
+
+    adguard:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.5:8181"
+        passHostHeader: true
+
+    guacamole:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.5:8084"
+        passHostHeader: true
+
+    radarr:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.6:7878"
+        passHostHeader: true
+
+    sonarr:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.6:8989"
+        passHostHeader: true
+
+    prowlarr:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.6:9696"
+        passHostHeader: true
+
+    code:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.6:8443"
+        passHostHeader: true
+
+    truenas:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.0.10"
+        passHostHeader: true
+
+    overserr:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.6:5055"
+        passHostHeader: true
+
+    dockge:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.6:5001"
+        passHostHeader: true
+
+    ansible:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.6:3003"
+        passHostHeader: true
+
+    prometheus:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.6:9090"
+        passHostHeader: true
+
+    grafana:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.6:3002"
+        passHostHeader: true
+
+    uptime:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.4:3001"
+        passHostHeader: true
+
+    adminer:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.4:8080"
+        passHostHeader: true
+
+    tplink:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.1"
+        passHostHeader: true
+
+    uvdesk:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.6:8383"
+        passHostHeader: true
+
+    jackett:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.4:9117"
+        passHostHeader: true
+
+    tau:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.6:8333"
+        passHostHeader: true
+
+    kuma-prod-2:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.9:3001"
+        passHostHeader: true
+ #endregion
+  middlewares:
+    nextcloud-secure-headers:
+      headers:
+        hostsProxyHeaders:
+          - "X-Forwarded-Host"
+        referrerPolicy: "same-origin"
+    
+    https-redirectscheme:
+      redirectScheme:
+        scheme: https
+        permanent: true
+    
+    https-redirect:
+      redirectscheme:
+        scheme: https 
+
+    default-headers:
+      headers:
+        frameDeny: true
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 15552000
+        customFrameOptionsValue: SAMEORIGIN
+        customRequestHeaders:
+          X-Forwarded-Proto: https
+
+    nextcloud-chain:
+      chain:
+        middlewares:
+          # - ... (e.g. rate limiting middleware)
+          - https-redirect
+          - nextcloud-secure-headers
+
+    idrac:
+      headers:
+        frameDeny: true
+        browserXssFilter: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsSeconds: 15552000
+        customFrameOptionsValue: SAMEORIGIN
+        customRequestHeaders:
+          X-Forwarded-Proto: https
+
+    default-whitelist:
+      ipWhiteList:
+        sourceRange:
+        - "10.0.0.0/8"
+        - "192.168.0.0/16"
+        - "172.16.0.0/12"
+
+    secured:
+      chain:
+        middlewares:
+        - default-whitelist
+        - default-headers

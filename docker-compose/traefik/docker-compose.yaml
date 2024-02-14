@@ -1,46 +1,55 @@
-version: "3.3"
+version: '3'
+
 services:
   traefik:
-    image: "traefik:v2.2.1"
-    container_name: traefik
-    hostname: traefik
+    image: traefik:latest
     command:
+      - --api.dashboard=true
+      - --providers.docker=true
+      - --providers.docker.swarmMode=true
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
-      - --providers.docker
-      - --providers.docker.swarmmode
-      - --providers.docker.constraints=Label(`traefik.constraint-label`, `traefik-public`)
-      - --providers.docker.exposedByDefault=false
-      - --api
-      - --certificatesresolvers.le.acme.email=${TRAEFIK_SSLEMAIL?Variable not set}
-      - --certificatesresolvers.le.acme.storage=./acme.json
-      - --certificatesresolvers.le.acme.tlschallenge=true
+    # security_opt:
+    #   - no-new-privileges:true
+    networks:
+      - proxy
     ports:
-      - "8184:80"
-      - "6443:443"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./acme.json:/acme.json"
+      - 80:80
+      - 443:443
+    environment:
+      - CF_DNS_API_TOKEN=${API_TOKEN}
+      # If you choose to use an API Key instead of a Token, specify your email as well
+      # - CF_API_EMAIL=user@example.com
+      # - CF_API_KEY=YOUR_API_KEY
     deploy:
       mode: global
-      labels:        
-          - "traefik.enable=true"
-          # Dashboard
-          - "traefik.http.routers.traefik.rule=Host(`dashboard.${PRIMARY_DOMAIN}`)"
-          - "traefik.http.routers.traefik.service=api@internal"
-          - "traefik.http.routers.traefik.tls=true"
-          - "traefik.http.routers.traefik.tls.certresolver=le"
-          - "traefik.http.routers.traefik.entrypoints=websecure"
-          - "traefik.http.routers.traefik.middlewares=authtraefik"
-          - "traefik.http.middlewares.authtraefik.basicauth.users=devAdmin:$$2y$$05$$h9OxLeY20/5uiXjfPgdRxuFlrfqBf2QifYDgrwsR6rAEgX3/dpOGq" # user:devAdmin, password:devto
-          # global redirect to https
-          - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
-          - "traefik.http.routers.http-catchall.entrypoints=web"
-          - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
-          # middleware redirect
-          - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-    restart: unless-stopped
-    networks:
-      - traefik-public
+      # placement:
+      #   constraints:
+      #     - node.role == manager 
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /home/karl/docker-compose/docker-compose/traefik/data/traefik.yml:/traefik.yml:ro
+      - /home/karl/docker-compose/docker-compose/traefik/data/acme.json:/acme.json
+      - /home/karl/docker-compose/docker-compose/traefik/data/config.yml:/config.yml:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.entrypoints=http"
+      - "traefik.http.routers.traefik.rule=Host(`local.phoenixonline.club`)"
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=karl:$$apr1$$Uag2H.oZ$$1RzZeZBb7K98COGSfzjaB0"
+      - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
+      - "traefik.http.routers.traefik-secure.entrypoints=https"
+      - "traefik.http.routers.traefik-secure.rule=Host(`local.phoenixonline.club`)"
+      - "traefik.http.routers.traefik-secure.middlewares=traefik-auth"
+      - "traefik.http.routers.traefik-secure.tls=true"
+      - "traefik.http.routers.traefik-secure.tls.certresolver=cloudflare"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].main=phoenixonline.club"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.phoenixonline.club"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.local.phoenixonline.club"
+      - "traefik.http.routers.traefik-secure.service=api@internal"
+
 networks:
-  traefik-public:
+  proxy:
+    external: true

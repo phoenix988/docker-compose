@@ -1,16 +1,19 @@
 ---
-  - name: Update starship config
-    hosts: all_servers
-    tasks:
-      - name: Setting starship config
-        template:
-          src: /home/karl/.config/starship-themes/nord.toml
-          dest: /home/karl/.config/starship.toml
-  - name: Update starship config on proxmox servers
-    hosts: pve
-    tasks:
-      - name: Setting starship config
-        template:
-          src: /home/karl/.config/starship-themes/nord.toml
-          dest: /home/karl/.config/starship.toml
- 
+- name: Update configs on all servers
+  hosts: all_servers
+  vars:
+    theme_name: "iceberg"
+  tasks:
+    - name: Setting up starship config to {{ theme_name }}
+      template:
+        src: /home/karl/.config/starship-themes/{{ theme_name }}.toml
+        dest: /home/karl/.config/starship.toml
+- name: Update starship config on proxmox servers
+  hosts: pve
+  vars:
+    theme_name: "iceberg"
+  tasks:
+    - name: Setting up starship config to {{ theme_name }}
+      template:
+        src: /home/karl/.config/starship-themes/{{ theme_name }}.toml
+        dest: /home/karl/.config/starship.toml
